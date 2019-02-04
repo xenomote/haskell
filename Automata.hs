@@ -13,6 +13,3 @@ module Automata where
 
     recognises :: Foldable w => Automata s a -> w a -> Bool
     recognises a w = a `accepts` scan a w
-
-    shift :: Automata s a -> a -> Automata s a
-    shift (Automata i t a) l = Automata (t i l) t a

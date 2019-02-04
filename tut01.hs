@@ -26,9 +26,7 @@ module Main where
 
             Section "b"
             ["Find four more words that are accepted by the DFA, and four that are not."]
-            (
-                map show $ take 4 (findWords mQ1 False) ++ take 4 (findWords mQ1 True)
-            )
+            (map show $ (take 4 $ findWords mQ1 True) ++ (take 4 $ findWords mQ1 False))
             (...)
         ]
 
@@ -36,8 +34,8 @@ module Main where
 
     -- Q1.
 
-    data StateQ1 = S1 | S2 | S3 deriving (Eq, Show)
-    data InputQ1 = A  | B       deriving (Eq, Show, Enum)
+    data StateQ1 = S1 | S2 | S3 deriving (Eq, Show, Read, Enum)
+    data InputQ1 = A  | B       deriving (Eq, Show, Read, Enum)
 
     tQ1 S1 B = S2
     tQ1 _  B = S3
@@ -47,18 +45,14 @@ module Main where
 
     mQ1 = Automata S1 tQ1 aQ1
 
-
     findWords :: Enum a => Automata s a -> Bool -> [[a]]
-    findWords m p = if (m `accepts` initial m)
-        then []
-        else concat $ fmap (\a -> fmap (\w -> a:w) $ findWords (m `shift` a) p) letters 
-            
-            where
-            
-            letters :: Enum a => [a]
-            letters = (enumFrom $ toEnum 0)
+    findWords m p = filter (\w -> m `recognises` w == p) sequences
 
+    sequences :: Enum a => [[a]]
+    sequences = wrap elements ++ [a:w | w <- sequences,  a <- elements]
 
+    elements :: Enum a => [a]
+    elements = [toEnum 0 ..]
 
-
-        
+    wrap :: [a] -> [[a]]
+    wrap = map (:[])

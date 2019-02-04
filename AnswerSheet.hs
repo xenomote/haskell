@@ -1,4 +1,4 @@
-module AnswerSheet where
+module AnswerSheet (Section (..)) where
 
     data Section = Section {
         part        :: String,
@@ -19,11 +19,11 @@ module AnswerSheet where
                 prefixed :: [Section] -> [Section]
                 prefixed = fmap (prefix part)
 
-            indented :: [String] -> [String]
-            indented = fmap ((++) "  ")
+                joined :: [Section] -> [String]
+                joined = concat . fmap lines
 
-            joined :: [Section] -> [String]
-            joined = concat . fmap lines
+    indented :: [String] -> [String]
+    indented = fmap ((++) "  ")
 
-            prefix :: String -> Section -> Section
-            prefix p s = s {part = p ++ "." ++ part s}
+    prefix :: String -> Section -> Section
+    prefix p s = s {part = p ++ "." ++ part s}
