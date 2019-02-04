@@ -14,6 +14,7 @@ module AnswerSheet (Section (..)) where
             lines (Section part question answer subsections) = part : question
                 ++ [""]
                 ++ answer
+                ++ [""]
                 ++ (indented . joined . prefixed $ subsections) where
 
                 prefixed :: [Section] -> [Section]
