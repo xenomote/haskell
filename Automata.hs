@@ -1,6 +1,7 @@
 module Automata where
 
     import Control.Monad
+    import Data.List (nub)
 
     import Automata.Deterministic
     import qualified Automata.Nondeterministic as NFA
@@ -13,9 +14,3 @@ module Automata where
         accepts = any $ NFA.accepts m
 
         transition a s = join $ fmap (m `NFA.transition` a) s
-
-        -- accepts :: t s -> Bool
-        -- transition :: m -> a -> s -> t s
-
-    elements :: (Enum a, Bounded a) => [a]
-    elements = [minBound ..]

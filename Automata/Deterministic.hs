@@ -9,7 +9,7 @@ module Automata.Deterministic where
     }
 
     scan :: Foldable f => Automata s a -> f a -> s
-    scan m w = foldl' (flip $ transition m) (initial m) w
+    scan m = foldl' (flip $ transition m) (initial m)
 
     recognises :: Foldable f => Automata s a -> f a -> Bool
-    recognises a w = a `accepts` scan a w
+    recognises m = accepts m . scan m
