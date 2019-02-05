@@ -1,15 +1,18 @@
 module Automata where
 
-    import Data.Foldable (foldl')
+    import Automata.Deterministic
+    import qualified Automata.Nondeterministic as NFA
 
-    data Automata s a = Automata {
-        initial    :: s,
-        transition :: (s -> a -> s),
-        accepts    :: (s -> Bool)
-    }
+    convert :: Traversable t => NFA.Automata t s a -> Automata (t s) a
+    convert m = Automata initial transition accepts where
 
-    scan :: Foldable w => Automata s a -> w a -> s
-    scan a w = foldl' (transition a) (initial a) w
+        initial :: t s  
+        initial = undefined
 
-    recognises :: Foldable w => Automata s a -> w a -> Bool
-    recognises a w = a `accepts` scan a w
+        accepts = any (NFA.accepts m)
+
+        transition :: a -> t s -> t s
+        transition a s = undefined
+
+    elements :: (Enum a, Bounded a) => [a]
+    elements = [minBound ..]

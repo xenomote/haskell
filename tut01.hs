@@ -67,8 +67,5 @@ module Main where
     sequences :: (Enum a, Bounded a) => [[a]]
     sequences = wrap elements ++ [a:w | w <- sequences,  a <- elements]
 
-    elements :: (Enum a, Bounded a) => [a]
-    elements = [minBound ..]
-
     wrap :: [a] -> [[a]]
     wrap = map (:[])
