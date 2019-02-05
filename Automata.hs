@@ -1,16 +1,15 @@
 module Automata where
 
-    import Control.Monad
-    import Data.List (nub)
+    import Data.Foldable
 
-    import Automata.Deterministic
-    import qualified Automata.Nondeterministic as NFA
+    data Automata s a = Automata {
+        initial    :: s,
+        transition :: a -> s -> s,
+        accepts    :: s -> Bool
+    }
 
-    convert :: (Monad t, Foldable t) => NFA.Automata t s a -> Automata (t s) a
-    convert m = Automata initial transition accepts where
+    scan :: Foldable f => Automata s a -> f a -> s
+    scan m = foldl' (flip $ transition m) (initial m)
 
-        initial = return $ NFA.initial m
-
-        accepts = any $ NFA.accepts m
-
-        transition a s = join $ fmap (m `NFA.transition` a) s
+    recognises :: Foldable f => Automata s a -> f a -> Bool
+    recognises m = accepts m . scan m

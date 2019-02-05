@@ -1,18 +1,21 @@
 module Automata.Nondeterministic where
 
-    import Data.Foldable
     import Control.Monad
-    import Data.List(nub)
+    import Data.Foldable
+    import Automata
 
-    data Automata f s a = Automata {
-        initial    :: s,
-        transition :: a -> s -> f s,
-        accepts    :: s -> Bool
-    }
+    nfsa :: (Alternative t, Monad t)
+        => s                -- i
+        -> (s -> t s)       -- e
+        -> (a -> s -> t s)  -- t
+        -> (s -> Bool)      -- a
+        -> Automata (t s) a
+    nfsa i e t a = Automata initial transition accept where
+        
+        initial = return i
 
-    scan :: (Monad f, Foldable f) => Automata f s a -> f a -> f s
-    scan m = foldlM (flip $ transition m) (initial m)
+        -- a -> t s -> t s 
+        transition a s = let s' = t a s in s' <|> join $ fmap e s'
 
-    recognises :: (Monad f, Foldable f) => Automata f s a -> f a -> Bool
-    recognises m = any (accepts m) . scan m
-
+        -- t s -> Bool
+        accept = any a
