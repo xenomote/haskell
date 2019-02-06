@@ -53,9 +53,9 @@ module Main where
     data StateQ1 = S1 | S2 | S3 deriving (Eq, Show, Read, Enum, Bounded)
     data InputQ1 = A  | B       deriving (Eq, Show, Read, Enum, Bounded)
 
-    tQ1 S1 B = S2
-    tQ1 _  B = S3
-    tQ1 _  A = S1
+    tQ1 B S1 = S2
+    tQ1 B _  = S3
+    tQ1 A _  = S1
 
     aQ1 = (==) S2
 
@@ -66,6 +66,9 @@ module Main where
 
     sequences :: (Enum a, Bounded a) => [[a]]
     sequences = wrap elements ++ [a:w | w <- sequences,  a <- elements]
+
+    elements :: (Enum a, Bounded a) => [a]
+    elements = [minBound ..]
 
     wrap :: [a] -> [[a]]
     wrap = map (:[])
