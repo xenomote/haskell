@@ -1,6 +1,6 @@
 module Expression where
 
-    import Automata
+    import Automata.Nondeterministic
 
     data Expression a = Empty 
         | Letter a 
